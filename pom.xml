@@ -63,10 +63,13 @@
         	<artifactId>mybatis</artifactId>
         	<version>3.4.6</version>
         </dependency>
+<<<<<<< HEAD
         <dependency>
     		<groupId>org.springframework.boot</groupId>
     		<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+=======
+>>>>>>> branch 'master' of https://github.com/KyleSJ/lafresh.git
 	</dependencies>
 
 	<build>
