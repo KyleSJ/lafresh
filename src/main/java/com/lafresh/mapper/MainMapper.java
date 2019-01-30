@@ -8,4 +8,5 @@ import com.lafresh.vo.SensorDataVO;
 public interface MainMapper {
 	void insertTest(String test);
 	void insertSensorData(SensorDataVO sensorData);
+	SensorDataVO selectSensorData(int sensorNo);
 }

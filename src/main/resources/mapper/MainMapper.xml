@@ -3,8 +3,37 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="com.lafresh.mapper.MainMapper">
+  	
   	<insert id="insertTest">
   		insert into connect_test(test_data) values('test OK')
   	</insert>
+  	
+  	<insert id="insertSensorData" >
+  		INSERT INTO DATA
+  		(
+  			D_SNO,
+  			D_TEMP,
+  			D_HUM,
+  			D_DATE
+  		) VALUES
+  		(
+  			#{no},
+  			#{temp},
+  			#{hum},
+  			SYSDATE()
+  		)
+  	</insert>
+  	
+  	<select id="selectSensorData" resultType="SensorDataVO">
+  		SELECT	D_SNO no
+  				,D_TEMP temp
+  				, D_HUM hum
+  				, D_DATE date
+  		FROM	DATA
+  		WHERE	D_SNO = #{sensorNo}
+  		ORDER BY D_DATE DESC
+  		LIMIT 1
+  	</select>
+  	
   </mapper>
  

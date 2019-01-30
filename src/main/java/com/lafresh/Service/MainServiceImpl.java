@@ -22,4 +22,9 @@ public class MainServiceImpl implements MainService{
 		mainMapper.insertSensorData(sensorData);
 	}
 
+	@Override
+	public SensorDataVO readSensorData(int sensorNo) {
+		return mainMapper.selectSensorData(sensorNo);
+	}
+
 }

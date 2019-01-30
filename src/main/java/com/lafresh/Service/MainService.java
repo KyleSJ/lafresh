@@ -8,4 +8,6 @@ public interface MainService {
 	
 	public void createSensorData(SensorDataVO sensorData);
 	
+	public SensorDataVO readSensorData(int sensorNo);
+	
 }
