@@ -6,7 +6,7 @@ public class SensorVO {
 	private float humA;
 	private int statusA;
 	private float tempB;
-	private float humZB;
+	private float humB;
 	private int statusB;
 	
 	public float getTempA() {
@@ -39,11 +39,11 @@ public class SensorVO {
 	public void setTempB(float tempB) {
 		this.tempB = tempB;
 	}
-	public float getHumZB() {
-		return humZB;
+	public float getHumB() {
+		return humB;
 	}
-	public void setHumZB(float humZB) {
-		this.humZB = humZB;
+	public void setHumB(float humB) {
+		this.humB = humB;
 	}
 	
 	
