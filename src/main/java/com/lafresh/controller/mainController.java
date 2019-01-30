@@ -27,10 +27,7 @@ public class mainController {
 	@RequestMapping("/sensorData/{sensorNo}")
 	@ResponseBody
 	public String getSensorData(@PathVariable("sensorNo") int sensorNo) {
-		System.out.println(sensorNo);
 		SensorDataVO sensor = mainService.readSensorData(sensorNo);
-		
-		System.out.println(sensor.getTemp());
 		
 		ObjectWriter ow = new ObjectMapper().writerWithDefaultPrettyPrinter();
 		String json="";

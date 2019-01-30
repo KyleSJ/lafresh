@@ -9,116 +9,142 @@
 </head>
 <!-- Styles -->
 <style>
-#chartdiv {
-  width: 100%;
-  height: 500px;
-}
-
+	canvas {
+	  display: inline-block !important;
+	}
 </style>
 
 <!-- Resources -->
-<script src="https://www.amcharts.com/lib/4/core.js"></script>
-<script src="https://www.amcharts.com/lib/4/charts.js"></script>
-<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
-<script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+    <script src="https://playground.abysscorp.org/chartjs/livecharts/dist/Chart.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <!-- Chart code -->
 <script>
+var samples = 20;
+var speed = 1000;
+let timeout = samples * speed;
+var values = [];
+var labels = [];
+var charts = [];
+var value = 0;
+var scale = 1;
 
-var chart = null;
+addEmptyValues(values, samples);
 
-$().ready(function(){
-	// Themes begin
-	am4core.useTheme(am4themes_animated);
-	// Themes end
-	
-	// Add data
-	
-	// Create chart instance
-	chart = am4core.create("chartdiv", am4charts.XYChart);
-	
-	//chart.dateFormatter.dateFormat = "HH-mm-ss";
-	
-	chart.data = new Array();
-	
-	//Create axes
-	var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-	dateAxis.dateFormatter = new am4core.DateFormatter();
-	dateAxis.dateFormatter.dateFormat = "HH-mm-ss";
-	var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-	
-	// Create series
-	var series = chart.series.push(new am4charts.LineSeries());
-	series.dataFields.valueY = "temp";
-	series.dataFields.dateX = "date";
-	series.tooltipText = "{temp}"
-	series.strokeWidth = 2;
-	series.minBulletDistance = 15;
-	
-	// Drop-shaped tooltips
-	series.tooltip.background.cornerRadius = 20;
-	series.tooltip.background.strokeOpacity = 0;
-	series.tooltip.pointerOrientation = "vertical"; 
-	series.tooltip.label.minWidth = 40;
-	series.tooltip.label.minHeight = 40;
-	series.tooltip.label.textAlign = "middle";
-	series.tooltip.label.textValign = "middle";
-	
-	// Make bullets grow on hover
-	var bullet = series.bullets.push(new am4charts.CircleBullet());
-	bullet.circle.strokeWidth = 2;
-	bullet.circle.radius = 4;
-	bullet.circle.fill = am4core.color("#fff");
-	
-	var bullethover = bullet.states.create("hover");
-	bullethover.properties.scale = 1.3;
-	
-	// Make a panning cursor
-	chart.cursor = new am4charts.XYCursor();
-	chart.cursor.behavior = "panXY";
-	chart.cursor.xAxis = dateAxis;
-	chart.cursor.snapToSeries = series;
-	
-	// Create vertical scrollbar and place it before the value axis
-	chart.scrollbarY = new am4core.Scrollbar();
-	chart.scrollbarY.parent = chart.leftAxesContainer;
-	chart.scrollbarY.toBack();
-	
-	// Create a horizontal scrollbar with previe and place it underneath the date axis
-	chart.scrollbarX = new am4charts.XYChartScrollbar();
-	chart.scrollbarX.series.push(series);
-	chart.scrollbarX.parent = chart.bottomAxesContainer;
-	
-	chart.events.on("ready", function () {
-	  dateAxis.zoom({start:0.79, end:1});
-	});
-	
-	setInterval(function(){
-		getSensorData(1);
-		chart.validateData();
-		console.log(chart.data);
-	}, 1000);
-	
-})
-	
+
+
+var originalCalculateXLabelRotation = Chart.Scale.prototype.calculateXLabelRotation
+
+function initialize() {
+  charts.push(new Chart(document.getElementById("chart0"), {
+    type: 'line',
+    data: {
+      //labels: labels,
+      datasets: [{
+        data: values,
+        backgroundColor: 'rgba(255, 99, 132, 0.1)',
+        borderColor: 'rgb(255, 99, 132)',
+        borderWidth: 2,
+        lineTension: 0.25,
+        pointRadius: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      animation: {
+        duration: speed * 1.5,
+        easing: 'linear'
+      },
+      legend: false,
+      scales: {
+        xAxes: [{
+          type: "time",
+          display: true
+        }],
+        yAxes: [{
+          ticks: {
+            max: 40,
+            min: 0
+          }
+        }]
+      }
+    }
+  }));
+}
+
+function addEmptyValues(arr, n) {
+  for(var i = 0; i < n; i++) {
+    arr.push({
+      x: moment().subtract((n - i) * speed, 'milliseconds').toDate(),
+      y: null
+    });
+  }
+}
+
+function rescale() {
+  var padding = [];
+  
+  addEmptyValues(padding, 10);
+  values.splice.apply(values, padding);
+  
+  scale++;
+}
+
+function updateCharts(){
+  charts.forEach(function(chart) {
+    chart.update();
+  });
+}
+
+function progress() {
+  value = getSensorData(1)
+  values.push({
+    x: new Date(),
+    y: value
+  });
+  values.shift();
+}
+
+function advance() {
+  if (values[0] !== null && scale < 4) {
+    //rescale();
+    updateCharts();
+  }
+  
+  progress();
+  updateCharts();
+  
+  setTimeout(function() {
+    requestAnimationFrame(advance);
+  }, speed);
+}
+
+//센서데이터
 function getSensorData(storeNo){
+	var res = 10;
+	var b = false;
 	$.ajax({
 		url: '/sensorData/' + storeNo,
 		dataType : 'json',
+		async : false,
 		success: function(data){
-			chart.data.push(data);
+			console.log(data);
+			res = data.temp;
+			return data.temp;
 		}
-	})
+	});
+	return res;
 }
-	
-	
+
+window.onload = function() {
+  initialize();
+  advance();
+};
+
 </script>
-<body>
-
-	<div id="chartdiv"></div>
-
-</body>
+  <body>
+    <canvas id="chart0" style="width:512px;height:320px"></canvas>
+    <canvas id="chart1" style="width:512px;height:320px"></canvas>
+  </body>
 </html>
