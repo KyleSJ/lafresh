@@ -3,15 +3,15 @@ package com.lafresh.vo;
 public class SensorDataVO {
 	
 	private int no;
-	private int temp;
-	private int hum;
+	private float temp;
+	private float hum;
 	private String date;
 
-	public int getTemp() {
+	public float getTemp() {
 		return temp;
 	}
 
-	public void setTemp(int temp) {
+	public void setTemp(float temp) {
 		this.temp = temp;
 	}
 
@@ -23,11 +23,11 @@ public class SensorDataVO {
 		this.no = no;
 	}
 
-	public int getHum() {
+	public float getHum() {
 		return hum;
 	}
 
-	public void setHum(int hum) {
+	public void setHum(float hum) {
 		this.hum = hum;
 	}
 

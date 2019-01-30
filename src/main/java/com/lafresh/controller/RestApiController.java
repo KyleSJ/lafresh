@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lafresh.Service.MainService;
 import com.lafresh.vo.SensorDataVO;
+import com.lafresh.vo.SensorVO;
 
 @RestController
 public class RestApiController {
@@ -15,11 +16,22 @@ public class RestApiController {
 	MainService mainService;
 	
 	@PostMapping("/test")
-	public String doTest(@RequestBody SensorDataVO sensorData) {
+	public String doTest(@RequestBody SensorVO sensor) {
 		
-		mainService.createSensorData(sensorData);
+		SensorDataVO sensorDataA = new SensorDataVO();
+		sensorDataA.setNo(1);
+		sensorDataA.setTemp(sensor.getTempA());
+		sensorDataA.setHum(sensor.getHumA());
 		
-		return "test ok temper is : " + sensorData.getTemp() + ", no : "+ sensorData.getNo();
+		SensorDataVO sensorDataB = new SensorDataVO();
+		sensorDataB.setNo(2);
+		sensorDataB.setTemp(sensor.getTempA());
+		sensorDataB.setHum(sensor.getHumA());
+		
+		mainService.createSensorData(sensorDataA);
+		mainService.createSensorData(sensorDataB);
+		
+		return "test ok temper";
 	}
 
 }
