@@ -28,6 +28,18 @@ public class RestApiController {
 		sensorDataB.setTemp(sensor.getTempA());
 		sensorDataB.setHum(sensor.getHumA());
 		
+		if(sensor.getTempA() >= 30 || sensor.getHumA() >= 60 ) {
+			if(sensor.getStatusA() == 0) {
+				
+			}
+		}
+		
+		if(sensor.getTempB() >= 30 || sensor.getHumZB() >= 80 ) {
+			if(sensor.getStatusB() == 0) {
+				
+			}
+		}
+		
 		mainService.createSensorData(sensorDataA);
 		mainService.createSensorData(sensorDataB);
 		
