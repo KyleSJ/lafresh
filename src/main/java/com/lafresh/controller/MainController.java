@@ -14,7 +14,7 @@ import com.lafresh.Service.MainService;
 import com.lafresh.vo.SensorDataVO;
 
 @Controller
-public class mainController {
+public class MainController {
 	
 	@Autowired
 	MainService mainService;

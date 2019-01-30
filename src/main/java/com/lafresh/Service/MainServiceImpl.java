@@ -7,24 +7,24 @@ import com.lafresh.mapper.MainMapper;
 import com.lafresh.vo.SensorDataVO;
 
 @Service
-public class MainServiceImpl implements MainService{
-	
-	@Autowired
-	MainMapper mainMapper;
+public class MainServiceImpl implements MainService {
 
-	@Override
-	public void createTest(String test) {
-		mainMapper.insertTest(test);
-	}
+  @Autowired
+  MainMapper mainMapper;
 
-	@Override
-	public void createSensorData(SensorDataVO sensorData) {
-		mainMapper.insertSensorData(sensorData);
-	}
+  @Override
+  public void createTest(String test) {
+    mainMapper.insertTest(test);
+  }
 
-	@Override
-	public SensorDataVO readSensorData(int sensorNo) {
-		return mainMapper.selectSensorData(sensorNo);
-	}
+  @Override
+  public void createSensorData(SensorDataVO sensorData) {
+    mainMapper.insertSensorData(sensorData);
+  }
+
+  @Override
+  public SensorDataVO readSensorData(int sensorNo) {
+    return mainMapper.selectSensorData(sensorNo);
+  }
 
 }
